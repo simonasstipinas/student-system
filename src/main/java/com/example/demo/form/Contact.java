@@ -62,7 +62,6 @@ public class Contact {
     }
 
 
-
     public boolean equals(Contact contact){
         if(contact == null) return false;
         else{

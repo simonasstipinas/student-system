@@ -45,4 +45,12 @@ public class Pupil {
     public void setName(String name) {
         this.name = name;
     }
+
+    public Long getContactId() {
+        return contactId;
+    }
+
+    public void setContactId(Long contactId) {
+        this.contactId = contactId;
+    }
 }

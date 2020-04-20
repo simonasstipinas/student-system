@@ -1,9 +1,9 @@
 package com.example.demo.form;
 
 public class Response {
-    public int status;
-    public String message;
-    public Object answer;
+    private int status;
+    private String message;
+    private Object answer;
 
     public Response(int status, String message, Object answer) {
         this.status = status;

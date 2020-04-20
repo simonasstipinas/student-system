@@ -14,11 +14,14 @@ import static java.util.stream.Collectors.toList;
 public class ManagingService {
     SchoolClass schoolClass = new SchoolClass();
     private final ContactsApiService contactsApiService;
+
     public ManagingService(ContactsApiService contactsApiService) {
         this.contactsApiService = contactsApiService;
+
         schoolClass.getSchoolClass().add(new Pupil("CLASSCODE1", "SIMONAS", 1l));
         Object o = contactsApiService.insertContact(new Contact(4, "Stipinas", "Simonas", "+366", "1115165"));
         schoolClass.getSchoolClass().add(new Pupil("CLASSCODE2", "KRISTUPAS"));
+
     }
 
     public Response insert(Pupil pupil) {
