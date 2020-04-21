@@ -5,11 +5,9 @@ import java.util.List;
 
 public class SchoolClass {
 
-    List<Pupil> schoolClass = new ArrayList<>();
+    private List<Pupil> schoolClass = new ArrayList<>();
 
     public SchoolClass() {
-        schoolClass.add(new Pupil("CLASSCODE1", "SIMONAS", 1l));
-        schoolClass.add(new Pupil("CLASSCODE2", "KRISTUPAS"));
     }
 
     public List<Pupil> getSchoolClass() {

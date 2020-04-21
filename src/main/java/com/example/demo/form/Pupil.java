@@ -2,28 +2,34 @@ package com.example.demo.form;
 
 public class Pupil {
 
-    String code;
+    private String code;
 
-    String name;
+    private String name;
 
-    Long contactId;
+    private String field;
+
+    private int fatherContact;
 
     public Pupil(
             String code,
-            String name) {
+            String name,
+            String field) {
 
         this.code = code;
         this.name = name;
+        this.field = field;
     }
 
     public Pupil(
             String code,
             String name,
-            Long contactId) {
+            String field,
+            int fatherContact) {
 
         this.code = code;
         this.name = name;
-        this.contactId = contactId;
+        this.field = field;
+        this.fatherContact = fatherContact;
     }
 
     public Pupil() {
@@ -46,11 +52,19 @@ public class Pupil {
         this.name = name;
     }
 
-    public Long getContactId() {
-        return contactId;
+    public String getField() {
+        return field;
     }
 
-    public void setContactId(Long contactId) {
-        this.contactId = contactId;
+    public void setField(String field) {
+        this.field = field;
+    }
+
+    public int getFatherContact() {
+        return fatherContact;
+    }
+
+    public void setFatherContact(int fatherContact) {
+        this.fatherContact = fatherContact;
     }
 }

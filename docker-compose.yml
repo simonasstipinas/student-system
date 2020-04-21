@@ -11,3 +11,7 @@ services:
     build: ./contacts
     ports:
       - "5000:5000"
+    networks:
+      - contacts
+networks:
+  contacts:
