@@ -20,8 +20,8 @@ public class ManagingService {
     public ManagingService(ContactsApiService contactsApiService) {
         this.contactsApiService = contactsApiService;
 
-        schoolClass.getSchoolClass().add(new Pupil("CLASSCODE1", "JOHN", "Biology", 74638));
-        schoolClass.getSchoolClass().add(new Pupil("CLASSCODE2", "KRISTUPAS", "History", 87014));
+        schoolClass.getSchoolClass().add(new Pupil("CLASSCODE1", "JOHN", "Biology", 12345));
+        schoolClass.getSchoolClass().add(new Pupil("CLASSCODE2", "KRISTUPAS", "History", 74638));
 
     }
 

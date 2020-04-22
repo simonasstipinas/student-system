@@ -4,18 +4,17 @@ import com.example.demo.form.Contact;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-
 @Service
 public class ContactsApiService {
 
     public Contact[] fetchAll() {
-        String baseHref = "http://localhost:5000/contacts";
+        String baseHref = "http://contacts:5000/contacts";
         return new RestTemplate().getForObject(baseHref, Contact[].class);
     }
 
     public Contact fetchOne(int id) {
-        String baseHref = "http://localhost:5000/contacts/" + String.valueOf(id);
+        String baseHref = "http://contacts:5000/contacts/" + String.valueOf(id);
+        System.out.println(baseHref);
         try {
             return new RestTemplate().getForObject(baseHref, Contact.class);
         } catch (Exception e) {
@@ -25,7 +24,7 @@ public class ContactsApiService {
     }
 
     public void update(int id, Contact contact) {
-        String baseHref = "http://localhost:5000/contacts/" + String.valueOf(id);
+        String baseHref = "http://contacts:5000/contacts/" + String.valueOf(id);
         try {
             new RestTemplate().put(baseHref, contact);
         } catch (Exception e) {
@@ -34,7 +33,7 @@ public class ContactsApiService {
     }
 
     public void delete(int id) {
-        String baseHref = "http://localhost:5000/contacts/" + String.valueOf(id);
+        String baseHref = "http://contacts:5000/contacts/" + String.valueOf(id);
         try {
             new RestTemplate().delete(baseHref);
         } catch (Exception e) {
@@ -43,7 +42,7 @@ public class ContactsApiService {
     }
 
     public Object insertContact(Contact contact) {
-        String baseHref = "http://localhost:5000/contacts";
+        String baseHref = "http://contacts:5000/contacts";
         try {
             return new RestTemplate().postForObject(baseHref, contact, Void.class);
         } catch (Exception e) {
