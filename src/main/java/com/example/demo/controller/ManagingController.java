@@ -57,4 +57,9 @@ public class ManagingController {
     public Response updateContact(@PathVariable String code, @RequestBody Contact contact) {
         return managingService.updateContact(code, contact);
     }
+
+    @DeleteMapping("deleteContact/{code}")
+    public Response deleteContact(@PathVariable String code) {
+        return managingService.deleteContact(code);
+    }
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -115,7 +116,8 @@ public class ManagingService {
             } else {
                 Contact contact;
                 try {
-                    contact = contactsApiService.fetchOne(pupils.get(0).getFatherContact());
+                    int fatherContact = pupils.get(0).getFatherContact();
+                    contact = fatherContact == 0 ? null : contactsApiService.fetchOne(fatherContact);
                 } catch (Exception e) {
                     contact = null;
                 }
@@ -129,10 +131,14 @@ public class ManagingService {
     public Response addContact(String code, Contact contact) {
         if (exist(code)) {
             schoolClass.getSchoolClass()
-                    .forEach(a -> a.setFatherContact(contact.getId()));
+                    .forEach(a -> {
+                        if (a.getCode().equalsIgnoreCase(code)) {
+                            a.setFatherContact(contact.getId());
+                        }
+                    });
             try {
-                contactsApiService.update(contact.getId(), contact);
-                return new Response(200, "Successfully updated");
+                contactsApiService.insertContact(contact);
+                return new Response(200, "Successfully added");
             } catch (Exception e) {
                 System.out.println(e);
                 return new Response(404, "Not found");
@@ -145,13 +151,36 @@ public class ManagingService {
     public Response updateContact(String code, Contact contact) {
         if (exist(code)) {
             schoolClass.getSchoolClass()
-                    .forEach(a -> a.setFatherContact(contact.getId()));
+                    .forEach(a -> {
+                        if (a.getCode().equalsIgnoreCase(code)) {
+                            a.setFatherContact(contact.getId());
+                        }
+                    });
             try {
-                contactsApiService.insertContact(contact);
-                return new Response(201, "Successfully added");
+                contactsApiService.update(contact.getId(), contact);
+                return new Response(201, "Successfully updated");
             } catch (Exception e) {
                 System.out.println(e);
-                return new Response(500, "Insert Failed");
+                return new Response(500, "Update failed");
+            }
+        } else {
+            return new Response(404, "Not found");
+        }
+    }
+
+    public Response deleteContact(String code) {
+        if (exist(code)) {
+            List<Pupil> pupils = schoolClass
+                    .getSchoolClass()
+                    .stream()
+                    .filter(a -> ! a.getCode().equalsIgnoreCase(code))
+                    .collect(toList());
+            try {
+                contactsApiService.delete(pupils.get(0).getFatherContact());
+                return new Response(204, "Deleted successfully");
+            } catch (Exception e) {
+                System.out.println(e);
+                return new Response(500, "Delete failed");
             }
         } else {
             return new Response(404, "Not found");

@@ -44,7 +44,7 @@ public class ContactsApiService {
     public Object insertContact(Contact contact) {
         String baseHref = "http://contacts:5000/contacts";
         try {
-            return new RestTemplate().postForObject(baseHref, contact, Void.class);
+            return new RestTemplate().postForObject(baseHref, contact, Object.class);
         } catch (Exception e) {
             System.out.println(e);
         }
