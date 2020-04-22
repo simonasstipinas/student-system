@@ -19,6 +19,6 @@ FROM openjdk:8
 
 COPY --from=builder /app/build/libs/demo-0.0.1-SNAPSHOT.jar managing-system.jar
 
-EXPOSE 5001
+EXPOSE 5000
 
 ENTRYPOINT ["java", "-jar", "managing-system.jar"]

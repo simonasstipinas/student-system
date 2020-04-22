@@ -3,10 +3,8 @@ services:
   contacts:
     container_name: contacts
     build: ./contacts
-    ports:
-      - "5000:5000"
   school:
     container_name: school
     build: .
     ports:
-      - "5001:5001"
+      - "5000:5000"
