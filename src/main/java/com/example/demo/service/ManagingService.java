@@ -53,6 +53,8 @@ public class ManagingService {
                     if (a.getCode().equalsIgnoreCase(pupil.getCode())) {
                         System.out.println("Changing name from " + a.getName() + " to " + pupil.getName());
                         a.setName(pupil.getName());
+                        a.setField(pupil.getField());
+                        a.setFatherContact(pupil.getFatherContact());
                     }
                 });
         if (exist(code)) {
@@ -63,9 +65,24 @@ public class ManagingService {
     }
 
     public Response delete(String code) {
-        schoolClass.setSchoolClass(
-                schoolClass.getSchoolClass().stream().filter(a -> a.getCode().equals(code)).collect(toList())
-        );
+        try {
+            List<Pupil> toDelete = schoolClass.getSchoolClass().stream()
+                    .filter(a -> ! a.getCode().equals(code))
+                    .collect(toList());
+            for (int i = 0; i < toDelete.size(); i++) {
+                if (toDelete.get(i).getFatherContact() != 0) {
+                    contactsApiService.delete(toDelete.get(i).getFatherContact());
+                }
+            }
+            schoolClass.setSchoolClass(
+                    schoolClass.getSchoolClass()
+                            .stream()
+                            .filter(a -> a.getCode().equals(code))
+                            .collect(toList())
+            );
+        } catch (Exception e) {
+            return new Response(404, "Not Found");
+        }
         return new Response(204, "Deleted successfully");
     }
 

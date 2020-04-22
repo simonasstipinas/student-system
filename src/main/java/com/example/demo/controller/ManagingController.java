@@ -48,7 +48,7 @@ public class ManagingController {
         return managingService.findById(code);
     }
 
-    @PutMapping("addContact/{code}")
+    @PostMapping("addContact/{code}")
     public Response addContact(@PathVariable String code, @RequestBody Contact contact) {
         return managingService.addContact(code, contact);
     }
