@@ -173,7 +173,13 @@ public class ManagingService {
             List<Pupil> pupils = schoolClass
                     .getSchoolClass()
                     .stream()
-                    .filter(a -> ! a.getCode().equalsIgnoreCase(code))
+                    .map(a -> {
+                        if (a.getCode().equalsIgnoreCase(code)) {
+                            a.setFatherContact(0);
+                            return a;
+                        }
+                        return null;
+                    })
                     .collect(toList());
             try {
                 contactsApiService.delete(pupils.get(0).getFatherContact());
