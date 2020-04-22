@@ -26,11 +26,16 @@ public class ManagingService {
 
     }
 
-    public Response insert(Pupil pupil) {
-        if (exist(pupil)) {
+    public Response insert(PupilContact entity) {
+        if (exist(entity.getCode())) {
             return new Response(400, "Already Exist");
         } else {
-            schoolClass.getSchoolClass().add(pupil);
+            int ll = entity.getContact() != null ? entity.getContact().getId() : 0;
+            schoolClass.getSchoolClass().add(new Pupil(entity.getCode(), entity.getName(), entity.getField(), ll));
+            Contact contact = entity.getContact();
+            if (contact != null) {
+                contactsApiService.insertContact(contact);
+            }
             return new Response(201, "Successfully added pupil");
         }
     }
@@ -48,17 +53,34 @@ public class ManagingService {
                 .anyMatch(a -> a.getCode().equalsIgnoreCase(code));
     }
 
-    public Response update(String code, Pupil pupil) {
-        schoolClass.getSchoolClass()
-                .forEach(a -> {
-                    if (a.getCode().equalsIgnoreCase(pupil.getCode())) {
-                        System.out.println("Changing name from " + a.getName() + " to " + pupil.getName());
-                        a.setName(pupil.getName());
-                        a.setField(pupil.getField());
-                        a.setFatherContact(pupil.getFatherContact());
-                    }
-                });
+    public Response update(String code, PupilContact entity) {
         if (exist(code)) {
+            try {
+                schoolClass.getSchoolClass()
+                        .forEach(a -> {
+                            if (a.getCode().equalsIgnoreCase(entity.getCode())) {
+                                a.setName(entity.getName());
+                                a.setField(entity.getField());
+                                if (a.getFatherContact() == 0 && entity.getContact() != null) {
+                                    contactsApiService.insertContact(entity.getContact());
+                                } else if (a.getFatherContact() != 0 && entity.getContact() != null) {
+                                    try {
+                                        Contact contact = contactsApiService.fetchOne(a.getFatherContact());
+                                        contactsApiService.update(contact.getId(), entity.getContact());
+                                    } catch (Exception e) {
+                                        contactsApiService.insertContact(entity.getContact());
+                                    }
+                                } else {
+                                    if (entity.getContact() != null) {
+                                        contactsApiService.insertContact(entity.getContact());
+                                    }
+                                }
+                                a.setFatherContact(entity.getContact() != null ? entity.getContact().getId() : 0);
+                            }
+                        });
+            } catch (Exception e) {
+                return new Response(404, "Pupil not found");
+            }
             return new Response(200, "Successfully updated");
         } else {
             return new Response(404, "Pupil not found");
@@ -67,18 +89,10 @@ public class ManagingService {
 
     public Response delete(String code) {
         try {
-            List<Pupil> toDelete = schoolClass.getSchoolClass().stream()
-                    .filter(a -> ! a.getCode().equals(code))
-                    .collect(toList());
-            for (int i = 0; i < toDelete.size(); i++) {
-                if (toDelete.get(i).getFatherContact() != 0) {
-                    contactsApiService.delete(toDelete.get(i).getFatherContact());
-                }
-            }
             schoolClass.setSchoolClass(
                     schoolClass.getSchoolClass()
                             .stream()
-                            .filter(a -> a.getCode().equals(code))
+                            .filter(a -> !a.getCode().equals(code))
                             .collect(toList())
             );
         } catch (Exception e) {
@@ -101,7 +115,6 @@ public class ManagingService {
             list.add(pupilContact);
         }
         answer = list;
-
         return new Response(200, "Class found", answer);
     }
 
@@ -125,71 +138,6 @@ public class ManagingService {
             }
         } else {
             return new Response(404, "Pupil not found");
-        }
-    }
-
-    public Response addContact(String code, Contact contact) {
-        if (exist(code)) {
-            schoolClass.getSchoolClass()
-                    .forEach(a -> {
-                        if (a.getCode().equalsIgnoreCase(code)) {
-                            a.setFatherContact(contact.getId());
-                        }
-                    });
-            try {
-                contactsApiService.insertContact(contact);
-                return new Response(200, "Successfully added");
-            } catch (Exception e) {
-                System.out.println(e);
-                return new Response(404, "Not found");
-            }
-        } else {
-            return new Response(404, "Not found");
-        }
-    }
-
-    public Response updateContact(String code, Contact contact) {
-        if (exist(code)) {
-            schoolClass.getSchoolClass()
-                    .forEach(a -> {
-                        if (a.getCode().equalsIgnoreCase(code)) {
-                            a.setFatherContact(contact.getId());
-                        }
-                    });
-            try {
-                contactsApiService.update(contact.getId(), contact);
-                return new Response(201, "Successfully updated");
-            } catch (Exception e) {
-                System.out.println(e);
-                return new Response(500, "Update failed");
-            }
-        } else {
-            return new Response(404, "Not found");
-        }
-    }
-
-    public Response deleteContact(String code) {
-        if (exist(code)) {
-            List<Pupil> pupils = schoolClass
-                    .getSchoolClass()
-                    .stream()
-                    .map(a -> {
-                        if (a.getCode().equalsIgnoreCase(code)) {
-                            a.setFatherContact(0);
-                            return a;
-                        }
-                        return null;
-                    })
-                    .collect(toList());
-            try {
-                contactsApiService.delete(pupils.get(0).getFatherContact());
-                return new Response(204, "Deleted successfully");
-            } catch (Exception e) {
-                System.out.println(e);
-                return new Response(500, "Delete failed");
-            }
-        } else {
-            return new Response(404, "Not found");
         }
     }
 }

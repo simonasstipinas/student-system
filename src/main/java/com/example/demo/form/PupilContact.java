@@ -1,20 +1,45 @@
 package com.example.demo.form;
 
 public class PupilContact {
-    private Pupil pupil;
+    private String code;
+
+    private String name;
+
+    private String field;
+
     private Contact contact;
 
+    public PupilContact(){}
+
     public PupilContact(Pupil pupil, Contact contact) {
-        this.pupil = pupil;
+        this.code = pupil.getCode();
+        this.name = pupil.getName();
+        this.field = pupil.getField();
         this.contact = contact;
     }
 
-    public Pupil getPupil() {
-        return pupil;
+    public String getCode() {
+        return code;
     }
 
-    public void setPupil(Pupil pupil) {
-        this.pupil = pupil;
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getField() {
+        return field;
+    }
+
+    public void setField(String field) {
+        this.field = field;
     }
 
     public Contact getContact() {
