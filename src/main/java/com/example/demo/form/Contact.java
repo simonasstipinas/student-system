@@ -1,7 +1,5 @@
 package com.example.demo.form;
 
-
-
 public class Contact {
 
     private int id;

@@ -1,0 +1,80 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sim="http://simonas.stipinas.lt"
+           targetNamespace="http://simonas.stipinas.lt" elementFormDefault="qualified">
+
+    <xs:element name="insertPupilContactRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="pupilContact" type="sim:wsPupilContact" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="updatePupilContactRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="code" type="xs:string" />
+                <xs:element name="updatedPupilContact" type="sim:wsPupilContact" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="deletePupilContactRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="code" type="xs:string" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getPupilContactRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="code" type="xs:string" nillable="true" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getPupilContactResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="contacts" type="sim:wsPupilContact" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getByIdPupilContactResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="contact" type="sim:wsPupilContact"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="simpleMessageResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="message" type="xs:string"/>
+                <xs:element name="status" type="xs:int" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="wsPupilContact">
+        <xs:sequence>
+            <xs:element name="code" type="xs:string"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="field" type="xs:string"/>
+            <xs:element name="contact" type="sim:wsContact"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="wsContact">
+        <xs:sequence>
+            <xs:element name="id" type="xs:int"/>
+            <xs:element name="surname" type="xs:string"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="number" type="xs:string"/>
+            <xs:element name="email" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
